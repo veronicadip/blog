@@ -17,7 +17,42 @@ class RenderBlogs extends Component {
     );
   }
 }
-class RenderPosts extends Component {
+
+class RenderPostsTitle extends Component {
+  render() {
+    if (this.props.isLoading) {
+      return (
+        <div>
+          <span>Loading...</span>
+        </div>
+      )
+    }
+    return (
+      <div>
+        <h3>{this.props.title}</h3>
+      </div>
+    )
+  }
+}
+class RenderPostsContent extends Component {
+  state = {
+    showMore: false,
+  }
+  showMoreOrLess = () => {
+    if (this.state.showMore) {
+      return "Show Less"
+    }
+    return "Show More"
+  }
+  setButton = () => {
+    this.setState({ showMore: this.state.showMore === false ? true : false })
+  }
+  renderContent = () => {
+    if (this.state.showMore === false) {
+      return <div dangerouslySetInnerHTML={{ __html: this.props.content.substring(0, 100) }} />
+    }
+    return <div dangerouslySetInnerHTML={{ __html: this.props.content }} />
+  }
   render() {
     if (this.props.isLoading) {
       return (
@@ -28,8 +63,8 @@ class RenderPosts extends Component {
     }
     return (
       <div>
-        <h3>{this.props.title}</h3>
-        {this.props.content}
+        {this.renderContent()}
+        <button onClick={this.setButton}>{this.showMoreOrLess()}</button>
       </div>
     );
   }
@@ -40,8 +75,9 @@ class Home extends Component {
     error: false,
     isLoadingBlog: true,
     blogName: "",
-    isLoadingPost: true,
+    isLoadingPostTitle: true,
     postName: "",
+    isLoadingPostContent: true,
     postContent: "",
   };
   componentDidMount() {
@@ -75,17 +111,19 @@ class Home extends Component {
             .catch(() => {
               this.setState({ error: true, isLoadingBlog: false });
             });
+
           window.gapi.client.blogger.posts
             .list({ blogId: "8309785320197399506" })
             .then((postData) => {
               this.setState({
                 postName: postData.result.items.at(0).title,
                 postContent: postData.result.items.at(0).content,
-                isLoadingPost: false,
+                isLoadingPostTitle: false,
+                isLoadingPostContent: false,
               });
             })
             .catch(() => {
-              this.setState({ error: true, isLoadingPost: false });
+              this.setState({ error: true, isLoadingPostTitle: false, isLoadingPostContent: false, });
             });
         });
     });
@@ -120,10 +158,10 @@ class Home extends Component {
           title={this.state.blogName}
           isLoading={this.state.isLoadingBlog}
         />
-        <RenderPosts
-          title={this.state.postName}
+        <RenderPostsTitle title={this.state.postName} isLoading={this.state.isLoadingPostTitle} />
+        <RenderPostsContent
           content={this.state.postContent}
-          isLoading={this.state.isLoadingPost}
+          isLoading={this.state.isLoadingPostContent}
         />
       </div>
     );
