@@ -1,6 +1,6 @@
 import { Component } from "react";
 import { Link } from "react-router-dom";
-import  Blog  from "../components/Blog/Blog"
+import Blog from "../components/Blog/Blog"
 import PostTitle from "../components/PostTitle/PostTitle"
 import PostContent from "../components/PostContent/PostContent"
 
@@ -89,14 +89,8 @@ class Home extends Component {
   setButton = () => {
     this.setState({ showMore: !this.state.showMore })
   }
-  renderContent = () => {
-    if (this.state.showMore) {
-      return <PostContent content={this.state.postContent}
-        isLoading={this.state.isLoadingPostContent} />
-    }
-    return <PostContent content={this.state.postContent}
-      isLoading={this.state.isLoadingPostContent} />
-  }
+
+
 
   render() {
     return (
@@ -117,6 +111,7 @@ class Home extends Component {
         <PostContent
           content={this.state.postContent}
           isLoading={this.state.isLoadingPostContent}
+          showMore={this.state.showMore}
         />
         <button onClick={this.setButton}>{this.showMoreOrLess()}</button>
       </div>
