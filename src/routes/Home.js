@@ -1,74 +1,10 @@
 import { Component } from "react";
 import { Link } from "react-router-dom";
+import  Blog  from "../components/Blog/Blog"
+import PostTitle from "../components/PostTitle/PostTitle"
+import PostContent from "../components/PostContent/PostContent"
 
-class RenderBlogs extends Component {
-  render() {
-    if (this.props.isLoading) {
-      return (
-        <div>
-          <span>Loading...</span>
-        </div>
-      );
-    }
-    return (
-      <div>
-        <h2>{this.props.title}</h2>
-      </div>
-    );
-  }
-}
 
-class RenderPostsTitle extends Component {
-  render() {
-    if (this.props.isLoading) {
-      return (
-        <div>
-          <span>Loading...</span>
-        </div>
-      )
-    }
-    return (
-      <div>
-        <h3>{this.props.title}</h3>
-      </div>
-    )
-  }
-}
-class RenderPostsContent extends Component {
-  state = {
-    showMore: false,
-  }
-  showMoreOrLess = () => {
-    if (this.state.showMore) {
-      return "Show Less"
-    }
-    return "Show More"
-  }
-  setButton = () => {
-    this.setState({ showMore: this.state.showMore === false ? true : false })
-  }
-  renderContent = () => {
-    if (this.state.showMore === false) {
-      return <div dangerouslySetInnerHTML={{ __html: this.props.content.substring(0, 100) }} />
-    }
-    return <div dangerouslySetInnerHTML={{ __html: this.props.content }} />
-  }
-  render() {
-    if (this.props.isLoading) {
-      return (
-        <div>
-          <span>Loading...</span>
-        </div>
-      );
-    }
-    return (
-      <div>
-        {this.renderContent()}
-        <button onClick={this.setButton}>{this.showMoreOrLess()}</button>
-      </div>
-    );
-  }
-}
 class Home extends Component {
   state = {
     isLoggedIn: false,
@@ -79,6 +15,7 @@ class Home extends Component {
     postName: "",
     isLoadingPostContent: true,
     postContent: "",
+    showMore: false,
   };
   componentDidMount() {
     window.gapi.load("client:auth2", () => {
@@ -143,6 +80,24 @@ class Home extends Component {
     window.gapi.auth2.getAuthInstance().signOut();
   }
 
+  showMoreOrLess = () => {
+    if (this.state.showMore) {
+      return "Show Less"
+    }
+    return "Show More"
+  }
+  setButton = () => {
+    this.setState({ showMore: !this.state.showMore })
+  }
+  renderContent = () => {
+    if (this.state.showMore) {
+      return <PostContent content={this.state.postContent}
+        isLoading={this.state.isLoadingPostContent} />
+    }
+    return <PostContent content={this.state.postContent}
+      isLoading={this.state.isLoadingPostContent} />
+  }
+
   render() {
     return (
       <div className="home">
@@ -154,15 +109,16 @@ class Home extends Component {
         {this.state.isLoggedIn && (
           <button onClick={this.signOut}>Sign Out</button>
         )}
-        <RenderBlogs
+        <Blog
           title={this.state.blogName}
           isLoading={this.state.isLoadingBlog}
         />
-        <RenderPostsTitle title={this.state.postName} isLoading={this.state.isLoadingPostTitle} />
-        <RenderPostsContent
+        <PostTitle title={this.state.postName} isLoading={this.state.isLoadingPostTitle} />
+        <PostContent
           content={this.state.postContent}
           isLoading={this.state.isLoadingPostContent}
         />
+        <button onClick={this.setButton}>{this.showMoreOrLess()}</button>
       </div>
     );
   }
