@@ -11,11 +11,9 @@ class Home extends Component {
     error: false,
     isLoadingBlog: true,
     blogName: "",
-    isLoadingPostTitle: true,
-    postName: "",
-    isLoadingPostContent: true,
+    isLoadingPost: true,
     postContent: "",
-    showMore: false,
+    
   };
   componentDidMount() {
     window.gapi.load("client:auth2", () => {
@@ -53,14 +51,12 @@ class Home extends Component {
             .list({ blogId: "8309785320197399506" })
             .then((postData) => {
               this.setState({
-                postName: postData.result.items.at(0).title,
-                postContent: postData.result.items.at(0).content,
-                isLoadingPostTitle: false,
-                isLoadingPostContent: false,
+                postContent: postData.result.items,
+                isLoadingPost: false,
               });
             })
             .catch(() => {
-              this.setState({ error: true, isLoadingPostTitle: false, isLoadingPostContent: false, });
+              this.setState({ error: true, isLoadingPost: false, });
             });
         });
     });
@@ -80,15 +76,7 @@ class Home extends Component {
     window.gapi.auth2.getAuthInstance().signOut();
   }
 
-  showMoreOrLess = () => {
-    if (this.state.showMore) {
-      return "Show Less"
-    }
-    return "Show More"
-  }
-  setButton = () => {
-    this.setState({ showMore: !this.state.showMore })
-  }
+  
 
 
 
@@ -104,16 +92,12 @@ class Home extends Component {
           <button onClick={this.signOut}>Sign Out</button>
         )}
         <Blog
-          title={this.state.blogName}
-          isLoading={this.state.isLoadingBlog}
+          blogTitle={this.state.blogName}
+          postContent={this.state.postContent}
+          isLoadingPost={this.state.isLoadingPost}
+          isLoadingBlog={this.state.isLoadingBlog}
         />
-        <PostTitle title={this.state.postName} isLoading={this.state.isLoadingPostTitle} />
-        <PostContent
-          content={this.state.postContent}
-          isLoading={this.state.isLoadingPostContent}
-          showMore={this.state.showMore}
-        />
-        <button onClick={this.setButton}>{this.showMoreOrLess()}</button>
+        
       </div>
     );
   }
@@ -121,5 +105,6 @@ class Home extends Component {
 
 // blogger API key: AIzaSyDYXml006Hj3GNvIkiSlOk6FklzKtk054M
 // project ID: my-blog-project-1650306479512
+// window.gapi.client.blogger.posts.list({blogId: "8309785320197399506"}).then((xx) => console.log(xx))
 
 export default Home;

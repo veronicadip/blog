@@ -1,8 +1,9 @@
 import { Component } from "react";
+import PostContent from "../PostContent/PostContent"
 
 class Blog extends Component {
     render() {
-        if (this.props.isLoading) {
+        if (this.props.isLoadingBlog && this.props.isLoadingPost) {
             return (
                 <div>
                     <span>Loading...</span>
@@ -11,7 +12,8 @@ class Blog extends Component {
         }
         return (
             <div>
-                <h2>{this.props.title}</h2>
+                <h2>{this.props.blogTitle}</h2>
+                {this.props.postContent.map((post) => (<PostContent post={post} key={post.id}/>))}
             </div>
         );
     }

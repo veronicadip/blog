@@ -3,11 +3,23 @@ import { excerptHtml } from 'better-excerpt-html'
 
 
 class PostContent extends Component {
-  renderContent = () => {
-    if (this.props.showMore) {
-      return <div dangerouslySetInnerHTML={{ __html: this.props.content }} />
+  state = {
+    showMore: false,
+  }
+  showMoreOrLess = () => {
+    if (this.state.showMore) {
+      return "Show Less"
     }
-    return <div dangerouslySetInnerHTML={{ __html: excerptHtml(this.props.content, 100, "...") }} />
+    return "Show More"
+  }
+  setButton = () => {
+    this.setState({ showMore: !this.state.showMore })
+  }
+  renderContent = () => {
+    if (this.state.showMore) {
+      return <div dangerouslySetInnerHTML={{ __html: this.props.post.content }} />
+    }
+    return <div dangerouslySetInnerHTML={{ __html: excerptHtml(this.props.post.content, 100, "...") }} />
   }
   render() {
     if (this.props.isLoading) {
@@ -18,7 +30,11 @@ class PostContent extends Component {
       );
     }
     return (
-      this.renderContent()
+      <div>
+      <h3>{this.props.post.title}</h3>
+      {this.renderContent()}
+      <button onClick={this.setButton}>{this.showMoreOrLess()}</button>
+      </div>
     );
   }
 }
