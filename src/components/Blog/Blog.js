@@ -12,7 +12,7 @@ class Blog extends Component {
         }
         return (
             <div>
-                <h2>{this.props.blogTitle}</h2>
+                <h2>{this.props.blog.name}</h2>
                 {this.props.postContent.map((post) => (<PostContent post={post} key={post.id}/>))}
             </div>
         );

@@ -1,8 +1,6 @@
 import { Component } from "react";
 import { Link } from "react-router-dom";
 import Blog from "../components/Blog/Blog"
-import PostTitle from "../components/PostTitle/PostTitle"
-import PostContent from "../components/PostContent/PostContent"
 
 
 class Home extends Component {
@@ -10,10 +8,10 @@ class Home extends Component {
     isLoggedIn: false,
     error: false,
     isLoadingBlog: true,
-    blogName: "",
+    blogContent: [],
     isLoadingPost: true,
-    postContent: "",
-    
+    postContent: [],
+
   };
   componentDidMount() {
     window.gapi.load("client:auth2", () => {
@@ -39,7 +37,7 @@ class Home extends Component {
             .listByUser({ userId: "self" })
             .then((blogData) => {
               this.setState({
-                blogName: blogData.result.items.at(0).name,
+                blogContent: blogData.result.items,
                 isLoadingBlog: false,
               });
             })
@@ -76,7 +74,7 @@ class Home extends Component {
     window.gapi.auth2.getAuthInstance().signOut();
   }
 
-  
+
 
 
 
@@ -91,13 +89,9 @@ class Home extends Component {
         {this.state.isLoggedIn && (
           <button onClick={this.signOut}>Sign Out</button>
         )}
-        <Blog
-          blogTitle={this.state.blogName}
-          postContent={this.state.postContent}
+        {this.state.blogContent.map((blog) => (<Blog blog={blog} postContent={this.state.postContent}
           isLoadingPost={this.state.isLoadingPost}
-          isLoadingBlog={this.state.isLoadingBlog}
-        />
-        
+          isLoadingBlog={this.state.isLoadingBlog} />))}
       </div>
     );
   }
