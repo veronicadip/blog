@@ -6,12 +6,9 @@ import Blog from "../components/Blog/Blog"
 class Home extends Component {
   state = {
     isLoggedIn: false,
-    error: false,
+    blogError: false,
     isLoadingBlog: true,
     blogContent: [],
-    isLoadingPost: true,
-    postContent: [],
-
   };
   componentDidMount() {
     window.gapi.load("client:auth2", () => {
@@ -42,20 +39,10 @@ class Home extends Component {
               });
             })
             .catch(() => {
-              this.setState({ error: true, isLoadingBlog: false });
+              this.setState({ blogError: true, isLoadingBlog: false });
             });
 
-          window.gapi.client.blogger.posts
-            .list({ blogId: "8309785320197399506" })
-            .then((postData) => {
-              this.setState({
-                postContent: postData.result.items,
-                isLoadingPost: false,
-              });
-            })
-            .catch(() => {
-              this.setState({ error: true, isLoadingPost: false, });
-            });
+
         });
     });
   }
@@ -75,9 +62,6 @@ class Home extends Component {
   }
 
 
-
-
-
   render() {
     return (
       <div className="home">
@@ -89,9 +73,10 @@ class Home extends Component {
         {this.state.isLoggedIn && (
           <button onClick={this.signOut}>Sign Out</button>
         )}
-        {this.state.blogContent.map((blog) => (<Blog blog={blog} postContent={this.state.postContent}
-          isLoadingPost={this.state.isLoadingPost}
-          isLoadingBlog={this.state.isLoadingBlog} />))}
+        {this.state.blogContent.map((blog) => (<Blog blog={blog}
+          isLoadingBlog={this.state.isLoadingBlog}
+          key={blog.id}
+          blogError={this.state.blogError} />))}
       </div>
     );
   }
@@ -99,6 +84,5 @@ class Home extends Component {
 
 // blogger API key: AIzaSyDYXml006Hj3GNvIkiSlOk6FklzKtk054M
 // project ID: my-blog-project-1650306479512
-// window.gapi.client.blogger.posts.list({blogId: "8309785320197399506"}).then((xx) => console.log(xx))
 
 export default Home;

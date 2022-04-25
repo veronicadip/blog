@@ -29,11 +29,18 @@ class PostContent extends Component {
         </div>
       );
     }
+    if (this.props.postError) {
+      return (
+        <div>
+          <span>There was an error loading these posts, please try again.</span>
+        </div>
+      )
+    }
     return (
       <div>
-      <h3>{this.props.post.title}</h3>
-      {this.renderContent()}
-      <button onClick={this.setButton}>{this.showMoreOrLess()}</button>
+        <h3>{this.props.post.title}</h3>
+        {this.renderContent()}
+        <button onClick={this.setButton}>{this.showMoreOrLess()}</button>
       </div>
     );
   }
