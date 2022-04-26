@@ -54,11 +54,12 @@ class Blog extends Component {
       <div>
         <h2>{this.props.blog.name}</h2>
         {this.state.posts.map((post) => (
-          <Post post={post} key={post.id} />
+          <Post post={post} key={post.id} blogId={this.props.blog.id}/>
         ))}
       </div>
     );
   }
 }
+
 
 export default Blog;

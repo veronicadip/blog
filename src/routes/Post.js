@@ -1,0 +1,49 @@
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { useParams } from "react-router-dom";
+
+function Post() {
+  const params = useParams();
+  const blogId = params.blogId;
+  const postId = params.postId;
+  const [postTitle, setPostTitle] = useState("");
+  const [postAuthor, setPostAuthor] = useState("");
+  const [isLoadingPost, setIsLoadingPost] = useState(true);
+  const [postError, setPostError] = useState(false);
+
+  useEffect(() => {
+    window.gapi.load("client:auth2", () => {
+      window.gapi.client
+        .init({
+          apiKey: "AIzaSyDYXml006Hj3GNvIkiSlOk6FklzKtk054M",
+          discoveryDocs: [
+            "https://blogger.googleapis.com/$discovery/rest?version=v3",
+          ],
+          clientId:
+            "524350509394-02lt9mikkjuiea852kj4da9aj3ctibeq.apps.googleusercontent.com",
+          scope: "https://www.googleapis.com/auth/blogger",
+        })
+        .then(() => {
+          window.gapi.client.blogger.posts
+            .list({ blogId: blogId })
+            .then((postData) => {
+              setPostTitle(postData.result.items.at(0).title);
+                setPostAuthor(postData.result.items.at(0).author.displayName);
+                setIsLoadingPost(false);
+            })
+            .catch(setPostError(true));
+        });
+    });
+  });
+  if ()
+  return (
+    <div>
+      <p>Author: {postAuthor}</p>
+      <h2>{postTitle}</h2>
+    </div>
+  );
+}
+
+// window.gapi.client.blogger.posts.list({ blogId: "8309785320197399506" }).then((xx) => console.log(xx))
+
+export default Post;
