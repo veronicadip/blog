@@ -1,14 +1,13 @@
 import { Component } from "react";
 import { Link } from "react-router-dom";
-import Blog from "../components/Blog/Blog"
-
+import Blog from "../components/Blog/Blog";
 
 class Home extends Component {
   state = {
     isLoggedIn: false,
     blogError: false,
     isLoadingBlog: true,
-    blogContent: [],
+    blogs: [],
   };
   componentDidMount() {
     window.gapi.load("client:auth2", () => {
@@ -34,15 +33,13 @@ class Home extends Component {
             .listByUser({ userId: "self" })
             .then((blogData) => {
               this.setState({
-                blogContent: blogData.result.items,
+                blogs: blogData.result.items,
                 isLoadingBlog: false,
               });
             })
             .catch(() => {
               this.setState({ blogError: true, isLoadingBlog: false });
             });
-
-
         });
     });
   }
@@ -61,6 +58,23 @@ class Home extends Component {
     window.gapi.auth2.getAuthInstance().signOut();
   }
 
+  renderBlogs() {
+    if (this.state.isLoadingBlog) {
+      return (
+        <div>
+          <span>Loading...</span>
+        </div>
+      );
+    }
+    if (this.state.blogError) {
+      return (
+        <div>
+          <span>There was an error loading these blogs, please try again.</span>
+        </div>
+      );
+    }
+    return this.state.blogs.map((blog) => <Blog blog={blog} key={blog.id} />);
+  }
 
   render() {
     return (
@@ -73,10 +87,7 @@ class Home extends Component {
         {this.state.isLoggedIn && (
           <button onClick={this.signOut}>Sign Out</button>
         )}
-        {this.state.blogContent.map((blog) => (<Blog blog={blog}
-          isLoadingBlog={this.state.isLoadingBlog}
-          key={blog.id}
-          blogError={this.state.blogError} />))}
+        {this.renderBlogs()}
       </div>
     );
   }
