@@ -1,9 +1,13 @@
 import { Component } from "react";
 import { Link } from "react-router-dom";
+import Blog from "../components/Blog/Blog";
 
 class Home extends Component {
   state = {
     isLoggedIn: false,
+    blogsError: false,
+    isLoadingBlogs: true,
+    blogs: [],
   };
   componentDidMount() {
     window.gapi.load("client:auth2", () => {
@@ -11,7 +15,7 @@ class Home extends Component {
         .init({
           apiKey: "AIzaSyDYXml006Hj3GNvIkiSlOk6FklzKtk054M",
           discoveryDocs: [
-            "https://blogger.googleapis.com/$discovery/rest?version=v2",
+            "https://blogger.googleapis.com/$discovery/rest?version=v3",
           ],
           clientId:
             "524350509394-02lt9mikkjuiea852kj4da9aj3ctibeq.apps.googleusercontent.com",
@@ -25,6 +29,17 @@ class Home extends Component {
           this.updateSigninStatus(
             window.gapi.auth2.getAuthInstance().isSignedIn.get()
           );
+          window.gapi.client.blogger.blogs
+            .listByUser({ userId: "self" })
+            .then((blogData) => {
+              this.setState({
+                blogs: blogData.result.items,
+                isLoadingBlogs: false,
+              });
+            })
+            .catch(() => {
+              this.setState({ blogsError: true, isLoadingBlogs: false });
+            });
         });
     });
   }
@@ -43,6 +58,24 @@ class Home extends Component {
     window.gapi.auth2.getAuthInstance().signOut();
   }
 
+  renderBlogs() {
+    if (this.state.isLoadingBlogs) {
+      return (
+        <div>
+          <span>Loading...</span>
+        </div>
+      );
+    }
+    if (this.state.blogsError) {
+      return (
+        <div>
+          <span>There was an error loading these blogs, please try again.</span>
+        </div>
+      );
+    }
+    return this.state.blogs.map((blog) => <Blog blog={blog} key={blog.id} />);
+  }
+
   render() {
     return (
       <div className="home">
@@ -54,6 +87,7 @@ class Home extends Component {
         {this.state.isLoggedIn && (
           <button onClick={this.signOut}>Sign Out</button>
         )}
+        {this.renderBlogs()}
       </div>
     );
   }
