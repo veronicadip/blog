@@ -5,8 +5,8 @@ import Blog from "../components/Blog/Blog";
 class Home extends Component {
   state = {
     isLoggedIn: false,
-    blogError: false,
-    isLoadingBlog: true,
+    blogsError: false,
+    isLoadingBlogs: true,
     blogs: [],
   };
   componentDidMount() {
@@ -34,11 +34,11 @@ class Home extends Component {
             .then((blogData) => {
               this.setState({
                 blogs: blogData.result.items,
-                isLoadingBlog: false,
+                isLoadingBlogs: false,
               });
             })
             .catch(() => {
-              this.setState({ blogError: true, isLoadingBlog: false });
+              this.setState({ blogsError: true, isLoadingBlogs: false });
             });
         });
     });
@@ -59,14 +59,14 @@ class Home extends Component {
   }
 
   renderBlogs() {
-    if (this.state.isLoadingBlog) {
+    if (this.state.isLoadingBlogs) {
       return (
         <div>
           <span>Loading...</span>
         </div>
       );
     }
-    if (this.state.blogError) {
+    if (this.state.blogsError) {
       return (
         <div>
           <span>There was an error loading these blogs, please try again.</span>

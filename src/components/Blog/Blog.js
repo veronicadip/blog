@@ -3,9 +3,9 @@ import Post from "../Post/Post";
 
 class Blog extends Component {
   state = {
-    post: [],
-    isLoadingPost: true,
-    postError: false,
+    posts: [],
+    isLoadingPosts: true,
+    postsError: false,
   };
   componentDidMount() {
     window.gapi.load("client:auth2", () => {
@@ -24,26 +24,26 @@ class Blog extends Component {
             .list({ blogId: this.props.blog.id })
             .then((postData) => {
               this.setState({
-                post: postData.result.items,
-                isLoadingPost: false,
+                posts: postData.result.items,
+                isLoadingPosts: false,
               });
             })
             .catch(() => {
-              this.setState({ postError: true, isLoadingPost: false });
+              this.setState({ postsError: true, isLoadingPosts: false });
             });
         });
     });
   }
 
   render() {
-    if (this.state.isLoadingPost) {
+    if (this.state.isLoadingPosts) {
       return (
         <div>
           <span>Loading...</span>
         </div>
       );
     }
-    if (this.props.postError) {
+    if (this.props.postsError) {
       return (
         <div>
           <span>There was an error loading these posts, please try again.</span>
@@ -53,7 +53,7 @@ class Blog extends Component {
     return (
       <div>
         <h2>{this.props.blog.name}</h2>
-        {this.state.post.map((post) => (
+        {this.state.posts.map((post) => (
           <Post post={post} key={post.id} />
         ))}
       </div>
