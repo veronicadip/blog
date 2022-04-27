@@ -2,12 +2,12 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
 
+
 function Post() {
   const params = useParams();
   const blogId = params.blogId;
   const postId = params.postId;
-  const [postTitle, setPostTitle] = useState("");
-  const [postAuthor, setPostAuthor] = useState("");
+  const [postData, setPostData] = useState([]);
   const [isLoadingPost, setIsLoadingPost] = useState(true);
   const [postError, setPostError] = useState(false);
 
@@ -26,24 +26,42 @@ function Post() {
         .then(() => {
           window.gapi.client.blogger.posts
             .list({ blogId: blogId })
-            .then((postData) => {
-              setPostTitle(postData.result.items.at(0).title);
-                setPostAuthor(postData.result.items.at(0).author.displayName);
-                setIsLoadingPost(false);
+            .then((data) => {
+              setPostData(data.result.items.find((obj) => obj.id === postId));
+              setIsLoadingPost(false);
             })
-            .catch(setPostError(true));
+            .catch(setPostError(true), setIsLoadingPost(false));
         });
     });
   });
-  if ()
-  return (
-    <div>
-      <p>Author: {postAuthor}</p>
-      <h2>{postTitle}</h2>
-    </div>
-  );
+
+  const renderPostTest = () => {
+    if (isLoadingPost) {
+      return (
+        <div>
+          <span>Loading...</span>
+        </div>
+      )
+    }
+    if (postError) {
+      return (
+        <div>
+          <span>There was an error loading this post, please try again.</span>
+        </div>
+      )
+    }
+    return (
+      <div>
+        <h2>{postData.title}</h2>
+        <div dangerouslySetInnerHTML={{ __html: postData.content }} />
+      </div>
+    );
+  }
+  return renderPostTest()
+  
 }
 
 // window.gapi.client.blogger.posts.list({ blogId: "8309785320197399506" }).then((xx) => console.log(xx))
-
+/* 
+*/
 export default Post;
