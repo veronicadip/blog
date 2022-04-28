@@ -31,7 +31,6 @@ function Post() {
               path: `https://www.googleapis.com/blogger/v3/blogs/${blogId}/posts/${postId}?key=AIzaSyDYXml006Hj3GNvIkiSlOk6FklzKtk054M`,
             })
             .then((response) => {
-              console.log(response);
               setPostData(response);
               setIsLoadingPost(false);
             })
@@ -46,7 +45,6 @@ function Post() {
               path: `https://www.googleapis.com/blogger/v3/blogs/${blogId}/posts/${postId}/comments?key=AIzaSyDYXml006Hj3GNvIkiSlOk6FklzKtk054M`,
             })
             .then((response) => {
-              console.log(response);
               setPostComments(response);
               setIsLoadingComments(false);
             })
@@ -84,7 +82,7 @@ function Post() {
         );
       }
       return postComments.result.items.map((comment) => (
-        <Comment comment={comment} />
+        <Comment comment={comment} key={comment.id} />
       ));
     }
   };
@@ -110,13 +108,11 @@ function Post() {
   }
   return (
     <div>
-      <div className="postAuthor">
-        <img
-          src={postData.result.author.image.url}
-          alt="profile picture of the author of this post"
-        />
-        <span>{postData.result.author.displayName}</span>
-      </div>
+      <img
+        src={postData.result.author.image.url}
+        alt="profile picture of the author of this post"
+      />
+      <span>{postData.result.author.displayName}</span>
       <h1>{postData.result.title}</h1>
       <p>Published: {renderPublishedDate()}</p>
       <div dangerouslySetInnerHTML={{ __html: postData.result.content }} />
@@ -125,7 +121,5 @@ function Post() {
     </div>
   );
 }
-
-// window.gapi.client.blogger.posts.list({ blogId: "8309785320197399506" }).then((xx) => console.log(xx))
 
 export default Post;
