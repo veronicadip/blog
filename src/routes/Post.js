@@ -7,7 +7,7 @@ function Post() {
   const params = useParams();
   const blogId = params.blogId;
   const postId = params.postId;
-  const [postData, setPostData] = useState([]);
+  const [postData, setPostData] = useState({});
   const [isLoadingPost, setIsLoadingPost] = useState(true);
   const [postError, setPostError] = useState(false);
 
@@ -30,10 +30,10 @@ function Post() {
               setPostData(data.result.items.find((obj) => obj.id === postId));
               setIsLoadingPost(false);
             })
-            .catch(setPostError(true), setIsLoadingPost(false));
+            .catch(() => setPostError(true), setIsLoadingPost(false));
         });
     });
-  });
+  }, []);
 
   const renderPostTest = () => {
     if (isLoadingPost) {
