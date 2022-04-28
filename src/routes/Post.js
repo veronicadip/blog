@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import Comment from "../components/Comment/Comment";
+import CommentsList from "../components/CommentsList/CommentsList";
 
 function Post() {
   const params = useParams();
@@ -26,10 +26,8 @@ function Post() {
           scope: "https://www.googleapis.com/auth/blogger",
         })
         .then(() => {
-          window.gapi.client
-            .request({
-              path: `https://www.googleapis.com/blogger/v3/blogs/${blogId}/posts/${postId}?key=AIzaSyDYXml006Hj3GNvIkiSlOk6FklzKtk054M`,
-            })
+          window.gapi.client.blogger.posts
+            .get({ postId: postId, blogId: blogId })
             .then((response) => {
               setPostData(response);
               setIsLoadingPost(false);
@@ -40,9 +38,10 @@ function Post() {
             });
         })
         .then(() => {
-          window.gapi.client
-            .request({
-              path: `https://www.googleapis.com/blogger/v3/blogs/${blogId}/posts/${postId}/comments?key=AIzaSyDYXml006Hj3GNvIkiSlOk6FklzKtk054M`,
+          window.gapi.client.blogger.comments
+            .list({
+              blogId: "8309785320197399506",
+              postId: "224585649748567428",
             })
             .then((response) => {
               setPostComments(response);
@@ -55,37 +54,6 @@ function Post() {
         });
     });
   }, []);
-
-  const renderNumberOfComments = () => {
-    if (postData.result.replies.totalItems === "0") {
-      return <p>There aren't any comments yet.</p>;
-    }
-    return <p>{postData.result.replies.totalItems} comments</p>;
-  };
-
-  const renderComments = () => {
-    if (postData.result.replies.totalItems !== "0") {
-      if (isLoadingComments) {
-        return (
-          <div>
-            <span>Loading...</span>
-          </div>
-        );
-      }
-      if (commentsError) {
-        return (
-          <div>
-            <span>
-              There was an error loading the comment section, please try again.
-            </span>
-          </div>
-        );
-      }
-      return postComments.result.items.map((comment) => (
-        <Comment comment={comment} key={comment.id} />
-      ));
-    }
-  };
 
   const renderPublishedDate = () => {
     const publishedDate = new Date(postData.result.published);
@@ -116,8 +84,12 @@ function Post() {
       <h1>{postData.result.title}</h1>
       <p>Published: {renderPublishedDate()}</p>
       <div dangerouslySetInnerHTML={{ __html: postData.result.content }} />
-      {renderNumberOfComments()}
-      {renderComments()}
+      <CommentsList
+        postData={postData}
+        postComments={postComments}
+        isLoadingComments={isLoadingComments}
+        commentsError={commentsError}
+      />
     </div>
   );
 }

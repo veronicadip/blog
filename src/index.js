@@ -4,8 +4,6 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import NewPost from "./routes/NewPost";
 import Post from "./routes/Post"
 
-// /blog/:blogId/post/:postId
-
 render(
   <BrowserRouter>
     <Routes>
