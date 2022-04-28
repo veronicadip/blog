@@ -1,11 +1,15 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import Comment from "../components/Comment/Comment";
 
 function Post() {
   const params = useParams();
   const blogId = params.blogId;
   const postId = params.postId;
   const [postData, setPostData] = useState({});
+  const [postComments, setPostComments] = useState({});
+  const [isLoadingComments, setIsLoadingComments] = useState(true);
+  const [commentsError, setCommentsError] = useState(false);
   const [isLoadingPost, setIsLoadingPost] = useState(true);
   const [postError, setPostError] = useState(false);
 
@@ -35,23 +39,60 @@ function Post() {
               setPostError(true);
               setIsLoadingPost(false);
             });
+        })
+        .then(() => {
+          window.gapi.client
+            .request({
+              path: `https://www.googleapis.com/blogger/v3/blogs/${blogId}/posts/${postId}/comments?key=AIzaSyDYXml006Hj3GNvIkiSlOk6FklzKtk054M`,
+            })
+            .then((response) => {
+              console.log(response);
+              setPostComments(response);
+              setIsLoadingComments(false);
+            })
+            .catch(() => {
+              setCommentsError(true);
+              setIsLoadingComments(false);
+            });
         });
     });
   }, []);
 
+  const renderNumberOfComments = () => {
+    if (postData.result.replies.totalItems === "0") {
+      return <p>There aren't any comments yet.</p>;
+    }
+    return <p>{postData.result.replies.totalItems} comments</p>;
+  };
+
   const renderComments = () => {
-      if (postData.result.replies.totalItems === "0") {
-          return <p>There aren't any comments yet.</p>
+    if (postData.result.replies.totalItems !== "0") {
+      if (isLoadingComments) {
+        return (
+          <div>
+            <span>Loading...</span>
+          </div>
+        );
       }
-      return <p>{postData.result.replies.totalItems} comments</p>
-  }
+      if (commentsError) {
+        return (
+          <div>
+            <span>
+              There was an error loading the comment section, please try again.
+            </span>
+          </div>
+        );
+      }
+      return postComments.result.items.map((comment) => (
+        <Comment comment={comment} />
+      ));
+    }
+  };
 
   const renderPublishedDate = () => {
-      const publishedDate = new Date(postData.result.published)
-      return publishedDate.toLocaleString()
-  }
-
-  
+    const publishedDate = new Date(postData.result.published);
+    return publishedDate.toLocaleString();
+  };
 
   if (isLoadingPost) {
     return (
@@ -69,19 +110,22 @@ function Post() {
   }
   return (
     <div>
-        <div className="postAuthor">
-      <img src={postData.result.author.image.url} alt="profile picture of the author of this post"/>
-      <span>{postData.result.author.displayName}</span>
+      <div className="postAuthor">
+        <img
+          src={postData.result.author.image.url}
+          alt="profile picture of the author of this post"
+        />
+        <span>{postData.result.author.displayName}</span>
       </div>
       <h1>{postData.result.title}</h1>
       <p>Published: {renderPublishedDate()}</p>
       <div dangerouslySetInnerHTML={{ __html: postData.result.content }} />
+      {renderNumberOfComments()}
       {renderComments()}
     </div>
   );
 }
 
 // window.gapi.client.blogger.posts.list({ blogId: "8309785320197399506" }).then((xx) => console.log(xx))
-/*
- */
+
 export default Post;
