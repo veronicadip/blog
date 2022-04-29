@@ -40,8 +40,8 @@ function Post() {
         .then(() => {
           window.gapi.client.blogger.comments
             .list({
-              blogId: "8309785320197399506",
-              postId: "224585649748567428",
+              blogId: blogId,
+              postId: postId,
             })
             .then((response) => {
               setPostComments(response);
