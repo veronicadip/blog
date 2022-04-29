@@ -10,6 +10,7 @@ render(
       <Route path="/" element={<Home />} />
       <Route path="/blog/:blogId/post/new" element={<NewPost />} />
       <Route path="/blog/:blogId/post/:postId" element={<Post />} />
+      <Route path="*" element={<h2>Error 404: page not found.</h2>} />
     </Routes>
   </BrowserRouter>,
   document.getElementById("root")
