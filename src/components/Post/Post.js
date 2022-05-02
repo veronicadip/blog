@@ -31,6 +31,11 @@ class Post extends Component {
       />
     );
   };
+  renderShowMore = () => {
+    if (this.props.post.content.length > 110) {
+      return <button onClick={this.setButton}>{this.showMoreOrLess()}</button>
+    }
+  }
   render() {
     return (
       <div>
@@ -41,7 +46,7 @@ class Post extends Component {
           <h3>{this.props.post.title}</h3>
         </Link>
         {this.renderContent()}
-        <button onClick={this.setButton}>{this.showMoreOrLess()}</button>
+        {this.renderShowMore()}
       </div>
     );
   }
