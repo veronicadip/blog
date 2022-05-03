@@ -77,6 +77,14 @@ class Home extends Component {
   }
 
   render() {
+    if (this.state.isLoggedIn === false) {
+      return (
+        <div>
+          <span>To visit this page you need to be logged.</span>
+          <Link to="/logIn">Log In</Link>
+        </div>
+      )
+    } 
     return (
       <div className="home">
         <Link to="/">All posts</Link> |{" "}
