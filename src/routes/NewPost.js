@@ -58,14 +58,7 @@ function NewPost() {
     });
   }, []);
 
-  if (isLoadingPosting) {
-    return (
-      <div>
-        <span>Posting...</span>
-      </div>
-    )
-  }
-  if (isLoadingData) {
+  if (isLoadingPosting || isLoadingData) {
     return (
       <div>
         <span>Loading...</span>
@@ -91,7 +84,9 @@ function NewPost() {
       <p>Add a new post on {blogData.name}</p>
       <form>
         <input className="add-title" id="add-title" type="text" placeholder="Title" onChange={setTitle} />
-        <input className="add-content" id="add-content" type="text" onChange={setContent} />
+        <div>
+        <textarea className="add-content" id="add-content" cols="80" rows="30" onChange={setContent}></textarea>
+        </div>
         <button onClick={submitPostHandler}>Publish</button>
       </form>
     </div>
