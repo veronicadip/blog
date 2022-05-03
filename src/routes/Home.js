@@ -80,7 +80,6 @@ class Home extends Component {
     return (
       <div className="home">
         <Link to="/">All posts</Link> |{" "}
-        <Link to="/post/new">Add a new post</Link>
         {!this.state.isLoggedIn && (
           <button onClick={this.signIn}>Sign In</button>
         )}

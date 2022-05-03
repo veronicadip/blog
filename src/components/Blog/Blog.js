@@ -1,5 +1,6 @@
 import { Component } from "react";
 import Post from "../Post/Post";
+import { Link } from "react-router-dom";
 
 class Blog extends Component {
   state = {
@@ -56,6 +57,7 @@ class Blog extends Component {
         {this.state.posts.map((post) => (
           <Post post={post} key={post.id} blogId={this.props.blog.id}/>
         ))}
+        <Link to={`/blog/${this.props.blog.id}/post/new`}>Add a new post</Link>
       </div>
     );
   }
