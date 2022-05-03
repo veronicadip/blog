@@ -1,5 +1,8 @@
 import { Component } from "react";
 import { excerptHtml } from "better-excerpt-html";
+import { Link } from "react-router-dom";
+
+
 
 class Post extends Component {
   state = {
@@ -28,12 +31,22 @@ class Post extends Component {
       />
     );
   };
+  renderShowMore = () => {
+    if (this.props.post.content.length > 110) {
+      return <button onClick={this.setButton}>{this.showMoreOrLess()}</button>
+    }
+  }
   render() {
     return (
       <div>
-        <h3>{this.props.post.title}</h3>
+        <Link
+          to={`/blog/${this.props.blogId}/post/${this.props.post.id}`}
+          key={this.props.post.id}
+        >
+          <h3>{this.props.post.title}</h3>
+        </Link>
         {this.renderContent()}
-        <button onClick={this.setButton}>{this.showMoreOrLess()}</button>
+        {this.renderShowMore()}
       </div>
     );
   }
