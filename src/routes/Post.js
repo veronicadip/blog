@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import CommentsList from "../components/CommentsList/CommentsList";
+import { Link } from "react-router-dom";
 
 function Post() {
   const params = useParams();
@@ -90,6 +91,13 @@ function Post() {
         isLoadingComments={isLoadingComments}
         commentsError={commentsError}
       />
+      <Link
+        to={`/blog/${blogId}/post/${postId}/delete`}
+        key={postId}
+      >
+        Delete Post
+        </Link>
+
     </div>
   );
 }
