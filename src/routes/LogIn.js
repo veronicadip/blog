@@ -1,10 +1,10 @@
 import { Component } from "react";
-import { Link } from "react-router-dom";
+import { Navigate } from "react-router-dom";
+
 
 class LogIn extends Component {
   state = {
     isLoggedIn: false,
-    userName: "",
   };
   componentDidMount() {
     window.gapi.load("client:auth2", () => {
@@ -30,16 +30,6 @@ class LogIn extends Component {
     });
   }
 
-  fetchUserData = () => {
-    window.gapi.client.blogger.users
-      .get({ userId: "self" })
-      .then((userData) => {
-        this.setState({
-          userName: userData.result.displayName,
-        });
-      });
-  };
-
   updateSigninStatus = (isLoggedIn) => {
     this.setState({
       isLoggedIn: isLoggedIn,
@@ -50,24 +40,14 @@ class LogIn extends Component {
     window.gapi.auth2.getAuthInstance().signIn();
   }
 
-  eventHandler = () => {
-      this.signIn();
-      this.fetchUserData()
-  }
-
   render() {
-    if (this.state.isLoggedIn && this.state.userName) {
-      return (
-        <div>
-          <span>Welcome, {this.state.userName}!</span>
-          <Link to="/">Go Home</Link>
-        </div>
-      );
+    if (this.state.isLoggedIn) {
+      return <Navigate to="/" />
     }
     return (
       <div>
         <h1>Please sign up!</h1>
-        <button onClick={this.eventHandler}>Sign Up</button>
+        <button onClick={this.signIn}>Sign Up</button>
       </div>
     );
   }
