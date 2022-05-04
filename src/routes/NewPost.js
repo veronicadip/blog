@@ -1,5 +1,6 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
+import {parse} from "marked";
 
 function NewPost() {
   const params = useParams();
@@ -12,13 +13,12 @@ function NewPost() {
   const [isLoadingData, setIsLoadingData] = useState(true);
   const [dataError, setDataError] = useState(false);
 
-
   const setTitle = (event) => {
     setPostTitle(event.currentTarget.value)
   }
 
   const setContent = (event) => {
-    setPostContent(event.currentTarget.value)
+    setPostContent(parse(event.currentTarget.value))
   }
 
 
