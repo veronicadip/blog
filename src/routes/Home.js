@@ -73,6 +73,13 @@ class Home extends Component {
         </div>
       );
     }
+    if (this.state.blogs.length === 0) {
+      return (
+        <div>
+          <span>There aren't any blogs yet.</span>
+        </div>
+      )
+    }
     return this.state.blogs.map((blog) => <Blog blog={blog} key={blog.id} />);
   }
 
