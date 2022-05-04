@@ -92,10 +92,10 @@ function Post() {
         commentsError={commentsError}
       />
       <Link
-          to={`/blog/${blogId}/post/${postId}/delete`}
-          key={postId}
-        >
-          <button>Delete Post</button>
+        to={`/blog/${blogId}/post/${postId}/delete`}
+        key={postId}
+      >
+        Delete Post
         </Link>
 
     </div>

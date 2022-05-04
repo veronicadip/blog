@@ -54,7 +54,7 @@ function DeletePost() {
       <div>
         <button onClick={deletePostHandler}>Yes</button>
         <Link to={`/blog/${blogId}/post/${postId}`} key={postId}>
-          <button>No, go back</button>{" "}
+          No, go back{" "}
         </Link>
       </div>
     </div>
