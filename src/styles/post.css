@@ -1,0 +1,66 @@
+.postTop {
+  background-color: rgb(10, 118, 133);
+  display: flex;
+  height: 50px;
+}
+.profilePicture {
+  max-height: 32px;
+  max-width: 32px;
+  border-radius: 50%;
+  margin-left: 40px;
+  margin-top: 10px;
+}
+.userName {
+  margin-top: 15px;
+  color: black;
+  margin-left: 10px;
+  font-size: 14px;
+}
+.postPage {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+.publishDate {
+  font-size: small;
+}
+.postContent {
+  background-color: white;
+  padding: 5px 10px;
+  border-radius: 5px;
+}
+.deleteButton {
+  background-color: rgb(196, 196, 196);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  height: 20px;
+  width: 40px;
+  padding: 5px 9px;
+  border: none;
+  border-radius: 8px;
+  color: white;
+}
+.deleteButton:hover {
+  background-color: rgb(214, 214, 214);
+}
+.deleteButton:active {
+  background-color: rgb(184, 184, 184);
+}
+.commentsList {
+    margin-top: 50px;
+    margin-bottom: 25px;
+}
+.commentProfilePicture {
+    max-width: 25px;
+    max-height: 25px;
+    margin: -6px;
+    border-radius: 50%;
+}
+.commentAuthor {
+    margin-left: 15px;
+    margin-right: 10px;
+    font-size: large;
+}
+.commentDate {
+    font-size: 8px;
+}

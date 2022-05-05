@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import CommentsList from "../components/CommentsList/CommentsList";
 import { Link } from "react-router-dom";
+import "../styles/post.css";
 
 function Post() {
   const params = useParams();
@@ -77,27 +78,33 @@ function Post() {
   }
   return (
     <div>
-      <img
-        src={postData.result.author.image.url}
-        alt="profile picture of the author of this post"
-      />
-      <span>{postData.result.author.displayName}</span>
-      <h1>{postData.result.title}</h1>
-      <p>Published: {renderPublishedDate()}</p>
-      <div dangerouslySetInnerHTML={{ __html: postData.result.content }} />
-      <CommentsList
-        postData={postData}
-        postComments={postComments}
-        isLoadingComments={isLoadingComments}
-        commentsError={commentsError}
-      />
-      <Link
-        to={`/blog/${blogId}/post/${postId}/delete`}
-        key={postId}
-      >
-        Delete Post
-        </Link>
-
+      <div className="postTop">
+        <img
+        className="profilePicture"
+          src={postData.result.author.image.url}
+          alt="profile picture of the author of this post"
+        />
+        <span className="userName">{postData.result.author.displayName}</span>
+      </div>
+      <div className="postPage">
+        <h1>{postData.result.title}</h1>
+        <p className="publishDate">Published: {renderPublishedDate()}</p>
+        <div
+          className="postContent"
+          dangerouslySetInnerHTML={{ __html: postData.result.content }}
+        />
+        <CommentsList
+          postData={postData}
+          postComments={postComments}
+          isLoadingComments={isLoadingComments}
+          commentsError={commentsError}
+        />
+        <div className="deleteButton">
+          <Link to={`/blog/${blogId}/post/${postId}/delete`} key={postId}>
+            Delete
+          </Link>
+        </div>
+      </div>
     </div>
   );
 }

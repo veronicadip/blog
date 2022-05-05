@@ -67,13 +67,6 @@ class Home extends Component {
         </div>
       );
     }
-    if (this.state.blogsError) {
-      return (
-        <div>
-          <span>There was an error loading these blogs, please try again.</span>
-        </div>
-      );
-    }
     if (this.state.blogs.length === 0) {
       return (
         <div>
@@ -81,6 +74,14 @@ class Home extends Component {
         </div>
       )
     }
+    if (this.state.blogsError) {
+      return (
+        <div>
+          <span>There was an error loading these blogs, please try again.</span>
+        </div>
+      );
+    }
+    
     return this.state.blogs.map((blog) => <Blog blog={blog} key={blog.id} />);
   }
 

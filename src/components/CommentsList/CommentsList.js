@@ -23,7 +23,7 @@ class CommentsList extends Component {
       return <p>There aren't any comments yet.</p>;
     }
     return (
-      <div>
+      <div className="commentsList">
         <p>{this.props.postData.result.replies.totalItems} comments</p>
         {this.props.postComments.result.items.map((comment) => (
           <Comment comment={comment} key={comment.id} />

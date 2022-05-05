@@ -9,14 +9,15 @@ class Comment extends Component {
     return (
       <div>
         <img
+          className="commentProfilePicture"
           src={this.props.comment.author.image.url}
           alt="profile picture of the author of this comment"
         />
-        <span>
+        <span className="commentAuthor">
           <b>{this.props.comment.author.displayName}</b>
         </span>
-        <span>{this.renderCommentDate()}</span>
-        <p>{this.props.comment.content}</p>
+        <span className="commentDate">{this.renderCommentDate()}</span>
+        <p className="commentContent">{this.props.comment.content}</p>
       </div>
     );
   }
