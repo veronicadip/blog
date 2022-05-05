@@ -1,6 +1,7 @@
 import { Component } from "react";
 import { Link } from "react-router-dom";
 import Blog from "../components/Blog/Blog";
+import "../styles/home.css"
 
 class Home extends Component {
   state = {
@@ -86,14 +87,18 @@ class Home extends Component {
   render() {
     return (
       <div className="home">
-        <Link to="/">All posts</Link> |{" "}
+      <div className="homeTop">
+        <Link to="/" className="homeLink">Home</Link>
         {!this.state.isLoggedIn && (
-          <button onClick={this.signIn}>Sign In</button>
+          <button onClick={this.signIn} className="signInOrOut">Sign In</button>
         )}
         {this.state.isLoggedIn && (
-          <button onClick={this.signOut}>Sign Out</button>
+          <button onClick={this.signOut} className="signInOrOut">Sign Out</button>
         )}
+        </div>
+        <div className="allBlogs">
         {this.renderBlogs()}
+        </div>
       </div>
     );
   }
