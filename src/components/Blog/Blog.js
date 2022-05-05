@@ -44,15 +44,18 @@ class Blog extends Component {
     }
     return (
       <div className="blog">
-        <h2>{this.props.blog.name}</h2>
+        <h2 className="blogTitle">{this.props.blog.name}</h2>
         {this.state.posts.map((post) => (
-          <Post post={post} key={post.id} blogId={this.props.blog.id}/>
+          <Post post={post} key={post.id} blogId={this.props.blog.id} />
         ))}
-        <Link to={`/blog/${this.props.blog.id}/post/new`}>Add a new post</Link>
+        <div className="addPost">
+          <Link to={`/blog/${this.props.blog.id}/post/new`}>
+            Add a new post
+          </Link>
+        </div>
       </div>
     );
   }
 }
-
 
 export default Blog;
