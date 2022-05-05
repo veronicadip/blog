@@ -8,32 +8,17 @@ class Blog extends Component {
     isLoadingPosts: true,
     postsError: false,
   };
-  componentDidMount() {
-    window.gapi.load("client:auth2", () => {
-      window.gapi.client
-        .init({
-          apiKey: "AIzaSyDYXml006Hj3GNvIkiSlOk6FklzKtk054M",
-          discoveryDocs: [
-            "https://blogger.googleapis.com/$discovery/rest?version=v3",
-          ],
-          clientId:
-            "524350509394-02lt9mikkjuiea852kj4da9aj3ctibeq.apps.googleusercontent.com",
-          scope: "https://www.googleapis.com/auth/blogger",
-        })
-        .then(() => {
-          window.gapi.client.blogger.posts
-            .list({ blogId: this.props.blog.id })
-            .then((postData) => {
-              this.setState({
-                posts: postData.result.items,
-                isLoadingPosts: false,
-              });
-            })
-            .catch(() => {
-              this.setState({ postsError: true, isLoadingPosts: false });
-            });
-        });
-    });
+
+  async componentDidMount() {
+    try {
+      const postData = await this.props.gapi.getBlogPosts(this.props.blog.id);
+      this.setState({
+        posts: postData.result.items,
+        isLoadingPosts: false,
+      });
+    } catch (error) {
+      this.setState({ postsError: true, isLoadingPosts: false });
+    }
   }
 
   render() {
@@ -55,13 +40,12 @@ class Blog extends Component {
       <div>
         <h2>{this.props.blog.name}</h2>
         {this.state.posts.map((post) => (
-          <Post post={post} key={post.id} blogId={this.props.blog.id}/>
+          <Post post={post} key={post.id} blogId={this.props.blog.id} />
         ))}
         <Link to={`/blog/${this.props.blog.id}/post/new`}>Add a new post</Link>
       </div>
     );
   }
 }
-
 
 export default Blog;

@@ -9,39 +9,21 @@ class Home extends Component {
     isLoadingBlogs: true,
     blogs: [],
   };
-  componentDidMount() {
-    window.gapi.load("client:auth2", () => {
-      window.gapi.client
-        .init({
-          apiKey: "AIzaSyDYXml006Hj3GNvIkiSlOk6FklzKtk054M",
-          discoveryDocs: [
-            "https://blogger.googleapis.com/$discovery/rest?version=v3",
-          ],
-          clientId:
-            "524350509394-02lt9mikkjuiea852kj4da9aj3ctibeq.apps.googleusercontent.com",
-          scope: "https://www.googleapis.com/auth/blogger",
-        })
-        .then(() => {
-          window.gapi.auth2
-            .getAuthInstance()
-            .isSignedIn.listen(this.updateSigninStatus);
+  async componentDidMount() {
+    const { gapi } = this.props;
 
-          this.updateSigninStatus(
-            window.gapi.auth2.getAuthInstance().isSignedIn.get()
-          );
-          window.gapi.client.blogger.blogs
-            .listByUser({ userId: "self" })
-            .then((blogData) => {
-              this.setState({
-                blogs: blogData.result.items,
-                isLoadingBlogs: false,
-              });
-            })
-            .catch(() => {
-              this.setState({ blogsError: true, isLoadingBlogs: false });
-            });
-        });
-    });
+    gapi.onSigninChange(this.updateSigninStatus);
+    this.updateSigninStatus(gapi.isSignedIn());
+
+    try {
+      const blogData = await gapi.getUserBlogs("self");
+      this.setState({
+        blogs: blogData.result.items,
+        isLoadingBlogs: false,
+      });
+    } catch (error) {
+      this.setState({ blogsError: true, isLoadingBlogs: false });
+    }
   }
 
   updateSigninStatus = (isLoggedIn) => {
@@ -78,9 +60,11 @@ class Home extends Component {
         <div>
           <span>There aren't any blogs yet.</span>
         </div>
-      )
+      );
     }
-    return this.state.blogs.map((blog) => <Blog blog={blog} key={blog.id} />);
+    return this.state.blogs.map((blog) => (
+      <Blog blog={blog} key={blog.id} gapi={gapi} />
+    ));
   }
 
   render() {
@@ -90,8 +74,8 @@ class Home extends Component {
           <span>To visit this page you need to be logged.</span>
           <Link to="/logIn">Log In</Link>
         </div>
-      )
-    } 
+      );
+    }
     return (
       <div className="home">
         <Link to="/">All posts</Link> |{" "}

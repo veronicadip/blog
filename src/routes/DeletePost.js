@@ -2,37 +2,22 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
-function DeletePost() {
+function DeletePost({ gapi }) {
   const params = useParams();
   const blogId = params.blogId;
   const postId = params.postId;
   const [isDeleted, setIsDeleted] = useState(false);
   const [error, setError] = useState(false);
 
-  const deletePostHandler = () => {
-    window.gapi.load("client:auth2", () => {
-      window.gapi.client
-        .init({
-          apiKey: "AIzaSyDYXml006Hj3GNvIkiSlOk6FklzKtk054M",
-          discoveryDocs: [
-            "https://blogger.googleapis.com/$discovery/rest?version=v3",
-          ],
-          clientId:
-            "524350509394-02lt9mikkjuiea852kj4da9aj3ctibeq.apps.googleusercontent.com",
-          scope: "https://www.googleapis.com/auth/blogger",
-        })
-        .then(() => {
-          window.gapi.client.blogger.posts
-            .delete({ blogId: blogId, postId: postId })
-            .then(() => {
-              setIsDeleted(true);
-            })
-            .catch(() => {
-              setError(true);
-            });
-        });
-    });
+  const deletePostHandler = async () => {
+    try {
+      await gapi.deletePost(blogId, postId);
+      setIsDeleted(true);
+    } catch (error) {
+      setError(true);
+    }
   };
+
   if (isDeleted) {
     return (
       <div>
