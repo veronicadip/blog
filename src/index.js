@@ -2,8 +2,9 @@ import { render } from "react-dom";
 import Home from "./routes/Home";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import NewPost from "./routes/NewPost";
-import Post from "./routes/Post"
-import DeletePost from "./routes/DeletePost"
+import Post from "./routes/Post";
+import DeletePost from "./routes/DeletePost";
+import "./styles/index.css";
 
 render(
   <BrowserRouter>

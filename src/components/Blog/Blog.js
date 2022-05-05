@@ -5,7 +5,6 @@ import { Link } from "react-router-dom";
 class Blog extends Component {
   state = {
     posts: [],
-    isLoadingPosts: true,
     postsError: false,
   };
   componentDidMount() {
@@ -26,24 +25,16 @@ class Blog extends Component {
             .then((postData) => {
               this.setState({
                 posts: postData.result.items,
-                isLoadingPosts: false,
               });
             })
             .catch(() => {
-              this.setState({ postsError: true, isLoadingPosts: false });
+              this.setState({ postsError: true });
             });
         });
     });
   }
 
   render() {
-    if (this.state.isLoadingPosts) {
-      return (
-        <div>
-          <span>Loading...</span>
-        </div>
-      );
-    }
     if (this.props.postsError) {
       return (
         <div>
@@ -52,7 +43,7 @@ class Blog extends Component {
       );
     }
     return (
-      <div>
+      <div className="blog">
         <h2>{this.props.blog.name}</h2>
         {this.state.posts.map((post) => (
           <Post post={post} key={post.id} blogId={this.props.blog.id}/>
