@@ -24,12 +24,24 @@ class Gapi {
     });
   }
 
-  onSigninChange(listener) {
+  async onSigninChange(listener) {
+    await this.load();
     window.gapi.auth2.getAuthInstance().isSignedIn.listen(listener);
   }
 
-  isSignedIn() {
+  async isSignedIn() {
+    await this.load();
     return window.gapi.auth2.getAuthInstance().isSignedIn.get();
+  }
+
+  async signIn() {
+    await this.load();
+    window.gapi.auth2.getAuthInstance().signIn();
+  }
+
+  async signOut() {
+    await this.load();
+    window.gapi.auth2.getAuthInstance().signOut();
   }
 
   async getUserBlogs(userId) {
