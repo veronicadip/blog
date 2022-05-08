@@ -25,22 +25,19 @@ class Gapi {
   }
 
   async onSigninChange(listener) {
-    await this.load();
+    await this.load()
     window.gapi.auth2.getAuthInstance().isSignedIn.listen(listener);
   }
 
   async isSignedIn() {
-    await this.load();
+    await this.load()
     return window.gapi.auth2.getAuthInstance().isSignedIn.get();
   }
-
-  async signIn() {
-    await this.load();
+  signIn() {
     window.gapi.auth2.getAuthInstance().signIn();
   }
 
-  async signOut() {
-    await this.load();
+  signOut() {
     window.gapi.auth2.getAuthInstance().signOut();
   }
 

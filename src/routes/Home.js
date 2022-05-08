@@ -32,6 +32,8 @@ class Home extends Component {
     });
   };
 
+  
+
   renderBlogs() {
     if (this.state.isLoadingBlogs) {
       return (
