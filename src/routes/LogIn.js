@@ -6,28 +6,12 @@ class LogIn extends Component {
   state = {
     isLoggedIn: false,
   };
-  componentDidMount() {
-    window.gapi.load("client:auth2", () => {
-      window.gapi.client
-        .init({
-          apiKey: "AIzaSyDYXml006Hj3GNvIkiSlOk6FklzKtk054M",
-          discoveryDocs: [
-            "https://blogger.googleapis.com/$discovery/rest?version=v3",
-          ],
-          clientId:
-            "524350509394-02lt9mikkjuiea852kj4da9aj3ctibeq.apps.googleusercontent.com",
-          scope: "https://www.googleapis.com/auth/blogger",
-        })
-        .then(() => {
-          window.gapi.auth2
-            .getAuthInstance()
-            .isSignedIn.listen(this.updateSigninStatus);
+  async componentDidMount() {
+    const { gapi } = this.props;
 
-          this.updateSigninStatus(
-            window.gapi.auth2.getAuthInstance().isSignedIn.get()
-          );
-        });
-    });
+    gapi.onSigninChange(this.updateSigninStatus);
+    this.updateSigninStatus(gapi.isSignedIn());
+
   }
 
   updateSigninStatus = (isLoggedIn) => {
@@ -36,8 +20,8 @@ class LogIn extends Component {
     });
   };
 
-  signIn() {
-    window.gapi.auth2.getAuthInstance().signIn();
+  signIn = () => {
+    this.props.gapi.signIn()
   }
 
   render() {

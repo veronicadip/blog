@@ -32,6 +32,14 @@ class Home extends Component {
     });
   };
 
+  signIn = () => {
+    this.props.gapi.signIn()
+  }
+
+  signOut = () => {
+    this.props.gapi.signOut()
+  }
+
   renderBlogs() {
     if (this.state.isLoadingBlogs) {
       return (
@@ -72,10 +80,10 @@ class Home extends Component {
       <div className="home">
         <Link to="/">All posts</Link> |{" "}
         {!this.state.isLoggedIn && (
-          <button onClick={this.props.gapi.signIn}>Sign In</button>
+          <button onClick={this.signIn}>Sign In</button>
         )}
         {this.state.isLoggedIn && (
-          <button onClick={this.props.gapi.signOut}>Sign Out</button>
+          <button onClick={this.signOut}>Sign Out</button>
         )}
         {this.renderBlogs()}
       </div>

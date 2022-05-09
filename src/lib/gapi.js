@@ -33,11 +33,13 @@ class Gapi {
     await this.load()
     return window.gapi.auth2.getAuthInstance().isSignedIn.get();
   }
-  signIn() {
+  async signIn() {
+    await this.load()
     window.gapi.auth2.getAuthInstance().signIn();
   }
 
-  signOut() {
+  async signOut() {
+    await this.load()
     window.gapi.auth2.getAuthInstance().signOut();
   }
 
