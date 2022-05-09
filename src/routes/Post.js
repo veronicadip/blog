@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import CommentsList from "../components/CommentsList/CommentsList";
 import { Link } from "react-router-dom";
 
-function Post() {
+function Post({ gapi }) {
   const params = useParams();
   const blogId = params.blogId;
   const postId = params.postId;
@@ -14,46 +14,40 @@ function Post() {
   const [isLoadingPost, setIsLoadingPost] = useState(true);
   const [postError, setPostError] = useState(false);
 
+
+  const fetchPostData = async () => {
+    try {
+      const postData = await gapi.getPost(postId, blogId);
+      setPostData(postData);
+      setIsLoadingPost(false);
+    } catch (error) {
+      setPostError(true);
+      setIsLoadingPost(false);
+    }
+  }
+
+  const fetchCommentsData = async () => {
+    try {
+      const postComments = await gapi.getPostComments(blogId, postId);
+      return (
+        setPostComments(postComments),
+        setIsLoadingComments(false)
+      )
+      
+      
+    }  catch (error) {
+      return (
+        setCommentsError(true),
+        setIsLoadingComments(false)
+      )
+    }
+  }
+
   useEffect(() => {
-    window.gapi.load("client:auth2", () => {
-      window.gapi.client
-        .init({
-          apiKey: "AIzaSyDYXml006Hj3GNvIkiSlOk6FklzKtk054M",
-          discoveryDocs: [
-            "https://blogger.googleapis.com/$discovery/rest?version=v3",
-          ],
-          clientId:
-            "524350509394-02lt9mikkjuiea852kj4da9aj3ctibeq.apps.googleusercontent.com",
-          scope: "https://www.googleapis.com/auth/blogger",
-        })
-        .then(() => {
-          window.gapi.client.blogger.posts
-            .get({ postId: postId, blogId: blogId })
-            .then((response) => {
-              setPostData(response);
-              setIsLoadingPost(false);
-            })
-            .catch(() => {
-              setPostError(true);
-              setIsLoadingPost(false);
-            });
-        })
-        .then(() => {
-          window.gapi.client.blogger.comments
-            .list({
-              blogId: blogId,
-              postId: postId,
-            })
-            .then((response) => {
-              setPostComments(response);
-              setIsLoadingComments(false);
-            })
-            .catch(() => {
-              setCommentsError(true);
-              setIsLoadingComments(false);
-            });
-        });
-    });
+    return (
+      fetchPostData(),
+      fetchCommentsData()
+    )
   }, []);
 
   const renderPublishedDate = () => {

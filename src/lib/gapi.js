@@ -46,9 +46,24 @@ class Gapi {
     return window.gapi.client.blogger.blogs.listByUser({ userId });
   }
 
+  async getBlogData(blogId) {
+    await this.load();
+    return window.gapi.client.blogger.blogs.get({
+      blogId,
+    });
+  }
+
   async getBlogPosts(blogId) {
     await this.load();
     return window.gapi.client.blogger.posts.list({ blogId });
+  }
+
+  async getPost(postId, blogId) {
+    await this.load();
+    return window.gapi.client.blogger.posts.get({ 
+      postId,
+      blogId,
+     });
   }
 
   async deletePost(blogId, postId) {
@@ -68,12 +83,14 @@ class Gapi {
     });
   }
 
-  async getBlogData(blogId) {
+  async getPostComments(blogId, postId) {
     await this.load();
-    return window.gapi.client.blogger.blogs.get({
+    return window.gapi.client.blogger.comments.list({
       blogId,
+      postId,
     });
   }
+
 }
 
 

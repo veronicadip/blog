@@ -12,7 +12,7 @@ render(
     <Routes>
       <Route path="/" element={<Home gapi={gapi} />} />
       <Route path="/blog/:blogId/post/new" element={<NewPost gapi={gapi} />} />
-      <Route path="/blog/:blogId/post/:postId" element={<Post />} />
+      <Route path="/blog/:blogId/post/:postId" element={<Post gapi={gapi}/>} />
       <Route path="*" element={<h2>Error 404: page not found.</h2>} />
       <Route path="/logIn" element={<LogIn gapi={gapi}/>} />
       <Route
