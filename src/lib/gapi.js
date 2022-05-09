@@ -58,7 +58,24 @@ class Gapi {
       postId,
     });
   }
+
+  async addPost(blogId, postTitle, postContent) {
+    await this.load();
+    return window.gapi.client.blogger.posts.insert({
+      blogId,
+      title: postTitle,
+      content: postContent,
+    });
+  }
+
+  async getBlogData(blogId) {
+    await this.load();
+    return window.gapi.client.blogger.blogs.get({
+      blogId,
+    });
+  }
 }
+
 
 // singleton pattern
 const gapi = new Gapi();
