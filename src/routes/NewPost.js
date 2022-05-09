@@ -35,8 +35,8 @@ function NewPost({ gapi }) {
 
   const submitPostHandler = async () => {
     try {
-      await gapi.addPost(blogId, postTitle, postContent);
       setIsLoadingPosting(true);
+      await gapi.addPost(blogId, postTitle, postContent);
     } catch (error) {
       setErrorPosting(true)
     }
@@ -75,7 +75,7 @@ function NewPost({ gapi }) {
         <div>
           <textarea className="add-content" id="add-content" cols="80" rows="30" onChange={setContent}></textarea>
         </div>
-        <button onClick={submitPostHandler}>Publish</button>
+        <button type="button" onClick={submitPostHandler}>Publish</button>
       </form>
     </div>
   )
