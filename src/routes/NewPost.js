@@ -40,6 +40,7 @@ function NewPost({ gapi }) {
     } catch (error) {
       setErrorPosting(true)
     }
+    setIsLoadingPosting(false)
   }
 
   useEffect(() => {

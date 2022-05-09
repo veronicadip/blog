@@ -33,9 +33,7 @@ function Post({ gapi }) {
         setPostComments(postComments),
         setIsLoadingComments(false)
       )
-      
-      
-    }  catch (error) {
+    } catch (error) {
       return (
         setCommentsError(true),
         setIsLoadingComments(false)
@@ -44,10 +42,8 @@ function Post({ gapi }) {
   }
 
   useEffect(() => {
-    return (
-      fetchPostData(),
+      fetchPostData();
       fetchCommentsData()
-    )
   }, []);
 
   const renderPublishedDate = () => {
