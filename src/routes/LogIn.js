@@ -10,7 +10,7 @@ class LogIn extends Component {
     const { gapi } = this.props;
 
     gapi.onSigninChange(this.updateSigninStatus);
-    this.updateSigninStatus(gapi.isSignedIn());
+    this.updateSigninStatus(await gapi.isSignedIn());
 
   }
 

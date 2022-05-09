@@ -62,10 +62,10 @@ class Gapi {
 
   async getPost(postId, blogId) {
     await this.load();
-    return window.gapi.client.blogger.posts.get({ 
+    return window.gapi.client.blogger.posts.get({
       postId,
       blogId,
-     });
+    });
   }
 
   async deletePost(blogId, postId) {

@@ -13,7 +13,7 @@ class Home extends Component {
     const { gapi } = this.props;
 
     gapi.onSigninChange(this.updateSigninStatus);
-    this.updateSigninStatus(gapi.isSignedIn());
+    this.updateSigninStatus(await gapi.isSignedIn());
 
     try {
       const blogData = await gapi.getUserBlogs("self");
