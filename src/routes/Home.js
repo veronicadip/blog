@@ -33,12 +33,12 @@ class Home extends Component {
   };
 
   signIn = () => {
-    this.props.gapi.signIn()
-  }
+    this.props.gapi.signIn();
+  };
 
   signOut = () => {
-    this.props.gapi.signOut()
-  }
+    this.props.gapi.signOut();
+  };
 
   renderBlogs() {
     if (this.state.isLoadingBlogs) {
