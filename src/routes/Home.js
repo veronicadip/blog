@@ -13,7 +13,7 @@ class Home extends Component {
     const { gapi } = this.props;
 
     gapi.onSigninChange(this.updateSigninStatus);
-    this.updateSigninStatus(gapi.isSignedIn());
+    this.updateSigninStatus(await gapi.isSignedIn());
 
     try {
       const blogData = await gapi.getUserBlogs("self");
@@ -32,12 +32,12 @@ class Home extends Component {
     });
   };
 
-  signIn() {
-    window.gapi.auth2.getAuthInstance().signIn();
+  signIn = () => {
+    this.props.gapi.signIn()
   }
 
-  signOut() {
-    window.gapi.auth2.getAuthInstance().signOut();
+  signOut = () => {
+    this.props.gapi.signOut()
   }
 
   renderBlogs() {
@@ -63,7 +63,7 @@ class Home extends Component {
       );
     }
     return this.state.blogs.map((blog) => (
-      <Blog blog={blog} key={blog.id} gapi={gapi} />
+      <Blog blog={blog} key={blog.id} gapi={this.props.gapi} />
     ));
   }
 

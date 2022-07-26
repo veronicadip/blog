@@ -1,8 +1,8 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import {parse} from "marked";
+import { parse } from "marked";
 
-function NewPost() {
+function NewPost({ gapi }) {
   const params = useParams();
   const blogId = params.blogId;
   const [blogData, setBlogData] = useState("");
@@ -14,49 +14,38 @@ function NewPost() {
   const [dataError, setDataError] = useState(false);
 
   const setTitle = (event) => {
-    setPostTitle(event.currentTarget.value)
+    setPostTitle(event.currentTarget.value);
   }
 
   const setContent = (event) => {
     setPostContent(parse(event.currentTarget.value))
   }
 
+  const fetchBlogData = async () => {
+    try {
+      const blogData = await gapi.getBlogData(blogId)
+      setBlogData(blogData.result);
+      setIsLoadingData(false);
+    } catch (error) {
+      setDataError(true);
+      setIsLoadingData(false)
+    }
+  }
 
-  const submitPostHandler = () => {
-    window.gapi.client.blogger.posts.insert({ blogId: blogId, title: postTitle, content: postContent }).then(() => {
+
+  const submitPostHandler = async () => {
+    try {
       setIsLoadingPosting(true);
-    })
-      .catch(() => {
-        setErrorPosting(true);
-      })
+      await gapi.addPost(blogId, postTitle, postContent);
+    } catch (error) {
+      setErrorPosting(true)
+    }
+    setIsLoadingPosting(false)
   }
 
   useEffect(() => {
-
-    window.gapi.load("client:auth2", () => {
-      window.gapi.client
-        .init({
-          apiKey: "AIzaSyDYXml006Hj3GNvIkiSlOk6FklzKtk054M",
-          discoveryDocs: [
-            "https://blogger.googleapis.com/$discovery/rest?version=v3",
-          ],
-          clientId:
-            "524350509394-02lt9mikkjuiea852kj4da9aj3ctibeq.apps.googleusercontent.com",
-          scope: "https://www.googleapis.com/auth/blogger",
-        })
-        .then(() => {
-          window.gapi.client.blogger.blogs.get({ blogId: blogId })
-            .then((response) => {
-              setBlogData(response.result);
-              setIsLoadingData(false);
-            })
-        })
-        .catch(() => {
-          setDataError(true);
-          setIsLoadingData(false);
-        })
-    });
-  }, []);
+    fetchBlogData();
+  }, [])
 
   if (isLoadingPosting || isLoadingData) {
     return (
@@ -85,12 +74,13 @@ function NewPost() {
       <form>
         <input className="add-title" id="add-title" type="text" placeholder="Title" onChange={setTitle} />
         <div>
-        <textarea className="add-content" id="add-content" cols="80" rows="30" onChange={setContent}></textarea>
+          <textarea className="add-content" id="add-content" cols="80" rows="30" onChange={setContent}></textarea>
         </div>
-        <button onClick={submitPostHandler}>Publish</button>
+        <button type="button" onClick={submitPostHandler}>Publish</button>
       </form>
     </div>
   )
 }
+
 
 export default NewPost;

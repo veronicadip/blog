@@ -24,12 +24,23 @@ class Gapi {
     });
   }
 
-  onSigninChange(listener) {
+  async onSigninChange(listener) {
+    await this.load()
     window.gapi.auth2.getAuthInstance().isSignedIn.listen(listener);
   }
 
-  isSignedIn() {
+  async isSignedIn() {
+    await this.load()
     return window.gapi.auth2.getAuthInstance().isSignedIn.get();
+  }
+  async signIn() {
+    await this.load()
+    window.gapi.auth2.getAuthInstance().signIn();
+  }
+
+  async signOut() {
+    await this.load()
+    window.gapi.auth2.getAuthInstance().signOut();
   }
 
   async getUserBlogs(userId) {
@@ -37,9 +48,24 @@ class Gapi {
     return window.gapi.client.blogger.blogs.listByUser({ userId });
   }
 
+  async getBlogData(blogId) {
+    await this.load();
+    return window.gapi.client.blogger.blogs.get({
+      blogId,
+    });
+  }
+
   async getBlogPosts(blogId) {
     await this.load();
     return window.gapi.client.blogger.posts.list({ blogId });
+  }
+
+  async getPost(postId, blogId) {
+    await this.load();
+    return window.gapi.client.blogger.posts.get({
+      postId,
+      blogId,
+    });
   }
 
   async deletePost(blogId, postId) {
@@ -49,7 +75,26 @@ class Gapi {
       postId,
     });
   }
+
+  async addPost(blogId, postTitle, postContent) {
+    await this.load();
+    return window.gapi.client.blogger.posts.insert({
+      blogId,
+      title: postTitle,
+      content: postContent,
+    });
+  }
+
+  async getPostComments(blogId, postId) {
+    await this.load();
+    return window.gapi.client.blogger.comments.list({
+      blogId,
+      postId,
+    });
+  }
+
 }
+
 
 // singleton pattern
 const gapi = new Gapi();
