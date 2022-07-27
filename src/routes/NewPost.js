@@ -79,17 +79,9 @@ function NewPost({ gapi }) {
           onChange={setTitle}
         />
         <div>
-          <textarea
-            className="add-content"
-            id="add-content"
-            cols="80"
-            rows="30"
-            onChange={setContent}
-          ></textarea>
+          <textarea className="add-content" id="add-content" cols="80" rows="30" onChange={setContent}></textarea>
         </div>
-        <button type="button" onClick={submitPostHandler}>
-          Publish
-        </button>
+        <button type="button" onClick={submitPostHandler}>Publish</button>
       </form>
     </div>
   );
